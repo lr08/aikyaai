@@ -18,7 +18,6 @@ const messageSubject = new BehaviorSubject([]);
 
 const GPTChat = () => {
   const [userInput, setUserInput] = useState("");
-  const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
 
@@ -53,8 +52,6 @@ const GPTChat = () => {
 
       // Add AI response to the reactive stream
       messageSubject.next({ role: "assistant", content: result });
-
-      setResponse(result);
     } catch (error) {
       console.error("Error:", error);
       messageSubject.next({
@@ -67,7 +64,16 @@ const GPTChat = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: 4, padding: 2 }}>
+    <Container
+      maxWidth="sm"
+      sx={{
+        marginTop: 4,
+        padding: 2,
+        backgroundColor: "#ffffff",
+        borderRadius: "8px",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <Typography variant="h4" gutterBottom align="center">
         AI Chat
       </Typography>
@@ -78,7 +84,8 @@ const GPTChat = () => {
           overflowY: "auto",
           padding: 2,
           marginBottom: 2,
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "8px",
         }}
       >
         {chatHistory.map((msg, idx) => (
@@ -86,7 +93,8 @@ const GPTChat = () => {
             key={idx}
             sx={{
               marginBottom: 2,
-              textAlign: msg.role === "user" ? "right" : "left",
+              display: "flex",
+              justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
             }}
           >
             <Typography
@@ -94,13 +102,10 @@ const GPTChat = () => {
               sx={{
                 display: "inline-block",
                 padding: "10px",
-                borderRadius: "10px",
-                backgroundColor: msg.role === "user" ? "#d1e7dd" : "#fff",
-                border:
-                  msg.role === "user"
-                    ? "1px solid #badbcc"
-                    : "1px solid #ddd",
-                maxWidth: "80%",
+                borderRadius: "12px",
+                backgroundColor: msg.role === "user" ? "#d1e7dd" : "#ffffff",
+                border: "1px solid #ddd",
+                maxWidth: "70%",
                 wordWrap: "break-word",
               }}
             >
@@ -109,8 +114,15 @@ const GPTChat = () => {
           </Box>
         ))}
         {loading && (
-          <Box sx={{ textAlign: "center", marginTop: 2 }}>
-            <CircularProgress size={20} />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: 50,
+            }}
+          >
+            <CircularProgress size={24} />
           </Box>
         )}
       </Paper>
@@ -121,6 +133,10 @@ const GPTChat = () => {
           placeholder="Type your message..."
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
+          sx={{
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+          }}
         />
         <Button
           type="submit"
@@ -128,6 +144,10 @@ const GPTChat = () => {
           color="primary"
           endIcon={<SendIcon />}
           disabled={loading}
+          sx={{
+            padding: "10px 16px",
+            borderRadius: "8px",
+          }}
         >
           Send
         </Button>
