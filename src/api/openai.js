@@ -9,6 +9,11 @@ const openai = axios.create({
 });
 
 export const fetchChatGPTResponse = async (messages) => {
+  if (!Array.isArray(messages) || messages.some((msg) => typeof msg !== "object")) {
+    throw new Error("Invalid messages array: must be an array of objects with 'role' and 'content'.");
+  }
+
+  console.log(messages)
   try {
     const response = await openai.post("/chat/completions", {
       model: "gpt-4", // Use "gpt-4" or "gpt-3.5-turbo"
