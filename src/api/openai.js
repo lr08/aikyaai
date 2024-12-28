@@ -16,7 +16,7 @@ export const fetchChatGPTResponse = async (messages) => {
   console.log(messages)
   try {
     const response = await openai.post("/chat/completions", {
-      model: "gpt-4", // Use "gpt-4" or "gpt-3.5-turbo"
+      model: "gpt-4o", // Use "gpt-4" or "gpt-3.5-turbo"
       messages: messages,
       temperature: 0.7,
       max_tokens: 100,
