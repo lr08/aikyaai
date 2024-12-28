@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { BehaviorSubject } from "rxjs";
 import { scan } from "rxjs/operators";
 import { fetchChatGPTResponse } from "../api/openai";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   Box,
   TextField,
@@ -63,6 +65,32 @@ const GPTChat = () => {
     }
   };
 
+  const renderMessageContent = (content) => {
+    return (
+      <ReactMarkdown
+        children={content}
+        remarkPlugins={[remarkGfm]}
+        components={{
+          p: (props) => <Typography paragraph {...props} />,
+          code: (props) => (
+            <Box
+              component="pre"
+              sx={{
+                backgroundColor: "#f0f0f0",
+                padding: "10px",
+                borderRadius: "8px",
+                overflowX: "auto",
+                fontFamily: "monospace",
+              }}
+            >
+              <code {...props} />
+            </Box>
+          ),
+        }}
+      />
+    );
+  };
+
   return (
     <Container
       maxWidth="sm"
@@ -97,10 +125,8 @@ const GPTChat = () => {
               justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
             }}
           >
-            <Typography
-              variant="body1"
+            <Box
               sx={{
-                display: "inline-block",
                 padding: "10px",
                 borderRadius: "12px",
                 backgroundColor: msg.role === "user" ? "#d1e7dd" : "#ffffff",
@@ -109,8 +135,8 @@ const GPTChat = () => {
                 wordWrap: "break-word",
               }}
             >
-              {msg.content}
-            </Typography>
+              {renderMessageContent(msg.content)}
+            </Box>
           </Box>
         ))}
         {loading && (
